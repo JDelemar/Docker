@@ -1,0 +1,79 @@
+version: "2.1"
+
+services:
+  #docker run --rm -it -p 80:80 -p 443:443 --network="alpinenginxredirecthttpsx2nodesites_appnet" --name testnginx alpinenginxredirecthttpsx2nodesites_nginx sh
+  nginx:
+    build: ./nginx 
+    links:
+      - testnode1
+      - testnode2
+    ports:
+      - 80:80
+      - 443:443
+    container_name: testnginx
+    environment:
+      - PORT1=8000
+      - PORT2=8001
+    networks:
+      - appnet 
+    # networks:
+    #   appnet:
+    #     ipv4_address: 172.21.1.100
+
+  #docker run --rm -it -p 8000:8000 --network="alpinenginxredirecthttpsx2nodesites_appnet" --name testnode1 alpinenginxredirecthttpsx2nodesites_testnode1 sh
+  testnode1:
+    build: 
+      # context: <path to the build>
+      context: ./node 
+      args:
+        sitedir: site1
+#        siteport: 8000
+# works with/without this, without below the ports are not available outside of the container 
+#    ports:
+#      - "8000:8000"        
+    expose:
+      - 8000
+    volumes:
+      # all of our current files in current directory (working files)
+      - ./node/sites/site1:/app 
+      # not sharing node_modules from host (dependecies)
+      - /app/node_modules      
+    container_name: testnode1
+    networks:
+      - appnet 
+    # uncommnet for static IP 
+    # networks:
+    #   appnet:
+    #     ipv4_address: 172.21.1.101
+
+  testnode2:
+    build: 
+      context: ./node 
+      args:
+        sitedir: site2
+#    ports:
+#      - "8001:8001"      
+    expose:
+      - 8001
+    volumes:
+      # all of our current files in current directory (working files)
+      - ./node/sites/site2:/app 
+      # not sharing node_modules from host (dependecies)
+      - /app/node_modules    
+    container_name: testnode2
+    networks:
+      - appnet 
+    # networks:
+    #    appnet:
+    #     ipv4_address: 172.21.1.102
+
+networks:
+  appnet:
+    driver: bridge
+    # uncomment for static IP 
+    # enable_ipv6: false
+    # ipam:
+    #   driver: default
+    #   config:
+    #   -
+    #     subnet: 172.21.1.0/24

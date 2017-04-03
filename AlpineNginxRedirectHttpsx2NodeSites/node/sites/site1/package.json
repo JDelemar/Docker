@@ -1,0 +1,13 @@
+{
+    "name": "site1",
+    "version": "0.0.1",
+    "description": "Site 1 container",
+    "main": "server.js",
+    "private": true,
+    "author": {
+        "name": "This guy"
+    },
+    "dependencies": {
+        "nodemon": "^1.9.1"
+    }
+}
