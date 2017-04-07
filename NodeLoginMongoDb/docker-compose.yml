@@ -1,0 +1,81 @@
+version: "2"
+
+services:
+  #docker run --rm -it -p 80:80 -p 443:443 --network="nodeloginmongodb_appnet" --name testloginnginx nodeloginmongodb_testloginnginx sh
+  loginnginx:
+    build: ./nginx 
+    links:
+      - loginweb
+      - loginmongo
+    ports:
+      - 80:80
+      - 443:443
+    container_name: loginnginx
+    environment:
+      - WEBPORT=8000
+      - MONGOPORT=27017
+      # MongoDb - 
+      # 27017: process
+      # 28017: http 
+    networks:
+      - appnet
+    # if you want to be a control freak and make static IPs...it is not necessary though
+    # networks:
+    #   appnet:
+    #     ipv4_address: 172.21.1.100
+
+  #docker run --rm -it -p 8000:8000 --network="nodeloginmongodb_appnet" --name loginweb nodeloginmongodb_loginweb sh
+  loginweb:
+    build: 
+      # context: <path to the build>
+      context: ./node 
+# works with/without this, without below the ports are not available outside of the container 
+#    ports:
+#      - "8000:8000"        
+    expose:
+      - 8000
+    volumes:
+      # all of our current files in current directory (working files)
+      - ./node/sites/site:/app 
+      # not sharing node_modules from host (dependecies)
+      - /app/node_modules  
+    environment:
+      - PORT=8000
+      - DB_HOST=loginmongo
+      - DB_PORT=27017
+      - DB_NAME=node-login
+      - DB_USER=test
+      - DB_PASS=test
+    # this container will exit if it cannot reach the mongodb container, restart it 
+    restart: always
+    container_name: loginweb
+    networks:
+      - appnet 
+    # networks:
+    #   appnet:
+    #     ipv4_address: 172.21.1.101
+
+  loginmongo:
+    image: mongo:3.4.3
+    # build: 
+    #   context: ./mongo 
+    # ports:
+    #  - "27017:27017"      
+    expose:
+      - 27017
+    container_name: loginmongo
+    networks:
+      - appnet 
+    # networks:
+    #    appnet:
+    #     ipv4_address: 172.21.1.102
+
+networks:
+  appnet:
+    driver: bridge
+    # enable_ipv6: false
+    # ipam:
+    #   driver: default
+    #   config:
+    #   -
+    #     subnet: 172.21.1.0/24
