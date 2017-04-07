@@ -13,7 +13,7 @@ Docker stuff
     <tr>
         <td>NodeLoginMongoDb</td>
         <td>
-            <p>Dockerized login system that uses Nodejs and MongoDB based of clone of [braitsch/node-login](https://github.com/braitsch/node-login) </p>
+            <p>Dockerized login system that uses Nodejs and MongoDB based of clone of <a href="https://github.com/braitsch/node-login">braitsch/node-login</a> </p>
         </td>
     </tr>
 </table>
