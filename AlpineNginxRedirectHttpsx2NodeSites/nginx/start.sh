@@ -15,11 +15,11 @@ sed "s/localhost:$PORT1/$ip:$PORT1/g" /etc/nginx/nginx.conf > /root/beforenode.c
 # wait for testnode1 container to be ready
 echo "Waiting for testnode1"
 while true; do
-    nc -z -w1 testnode1 8000 2>/dev/null && break
+    nc -z -w1 testnode1 $PORT1 2>/dev/null && break
 done
 echo "Waiting for testnode2"
 while true; do
-    nc -z -w1 testnode2 8001 2>/dev/null && break
+    nc -z -w1 testnode2 $PORT2 2>/dev/null && break
 done
 
 ip1=$(getent hosts testnode1 | awk '{ print $1 }')
