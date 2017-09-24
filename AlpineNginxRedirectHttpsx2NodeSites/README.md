@@ -13,10 +13,10 @@ The two node sites use nodemon so you can edit the files and nodemon will restar
   - The node_modules directory in each site is virtual and will not contain files when the containers are exited
 
 To test the project, run it with: docker-compose up 
-Your /etc/hosts (Mac, Linux) or C:\Windows\System32\Drivers\etc\hosts file will need to point to the machine running the Docker containers in order to reach them from your browser
+Your /etc/hosts (Mac, Linux) or C:\Windows\System32\Drivers\etc\hosts file will need to point to the machine running the Docker containers in order to reach them from your browser. This allows the hostname to be used in your browser to reach the sites.
 ```sh
-192.168.1.122  site1.local.com 
-192.168.1.123  site2.local.com 
+127.0.0.1      site1.local.com 
+172.0.0.1      site2.local.com 
 ```
 To reach the sites in your browser type:
   - Site 1 (you will be redirected to https with a self signed cert):

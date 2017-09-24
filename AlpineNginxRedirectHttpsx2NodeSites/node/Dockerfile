@@ -5,7 +5,11 @@ WORKDIR /app
 
 # make more versitile
 ADD ./sites/$sitedir/package.json /app 
-RUN npm install
+# install openssl
+RUN apk add --update openssl && \
+    rm -rf /var/cache/apk/*
+# RUN npm install
+RUN yarn
 ADD ./sites/$sitedir/. /app 
 # this variable is visible inside the container
 ENV NODE_ENV=development

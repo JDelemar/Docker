@@ -8,6 +8,7 @@
         "name": "This guy"
     },
     "dependencies": {
-        "nodemon": "^1.9.1"
+        "nodemon": "^1.9.1",
+        "pem": "^1.11.2"
     }
 }
