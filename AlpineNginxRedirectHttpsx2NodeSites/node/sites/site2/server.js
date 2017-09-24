@@ -11,7 +11,7 @@
 // server.listen(8001);
 
 var https = require('https'),
-pem = require('pem'); // needs openssl
+    pem = require('pem'); // needs openssl
 
 pem.createCertificate({days:1, selfSigned:true}, function(err, keys){
     https.createServer({key: keys.serviceKey, cert: keys.certificate}, function(request, response){
@@ -21,4 +21,4 @@ pem.createCertificate({days:1, selfSigned:true}, function(err, keys){
 });
 
 // put a message on the terminal
-console.log('Server running at http://127.0.0.1:8001');
+console.log('Server running at https://127.0.0.1:8001');
