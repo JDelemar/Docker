@@ -3,7 +3,7 @@
 ### Notes
 This project produces 3 docker images and containers:
   - 1 nginx container 
-  - 2 nodejs containers displaying two separate nodejs sites
+  - 2 nodejs containers displaying two separate nodejs sites (site1 is using http, site2 is using https). Both sites will use the nginx certificates
 
 You reach the nodejs containers through nginx 
 Nginx redirects all http requests to https
@@ -65,6 +65,8 @@ For trouble shooting purposes:
   - Check responses from sites
 ```sh
         curl -k "http:<site>[:<port>]"
+        curl -H 'Host: site2.local.com' -k 'https://localhost'
+        curl -H 'Host: site1.local.com' -k 'https://localhost' | /Applications/Firefox.app/Contents/MacOS/firefox "data:text/html;base64,$(base64 -i -)"
 ```
   - Look at output from container
 ```sh
