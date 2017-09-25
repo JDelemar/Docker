@@ -13,7 +13,9 @@ services:
     container_name: testnginx
     environment:
       - PORT1=8000
+      - HOST1=testnode1
       - PORT2=8001
+      - HOST2=testnode2
     networks:
       - appnet 
     # networks:

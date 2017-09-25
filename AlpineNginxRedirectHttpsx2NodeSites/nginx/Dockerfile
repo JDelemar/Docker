@@ -3,10 +3,13 @@ FROM nginx:1.11.10-alpine
 RUN apk add --update bash \
         nano \
         htop \
+        curl \
+    && rm -rf /var/cache/apk/* \        
     && mkdir -p /etc/ssl/private
 # bash, nano, and htop do not have to be included
     # nano for editing insided of container instead of vi
     # htop for looking at processes inside of container
+    # curl check for data from http/https servers
 
 # copy custom configuration file
 COPY nginx.conf /etc/nginx/nginx.conf

@@ -8,22 +8,24 @@
 # echo Site 2 port $PORT2
 # echo
 
-ip=$(getent hosts testnode1 | awk '{ print $1 }')
-echo IP for testnode1 is $ip
+ip=$(getent hosts $HOST1 | awk '{ print $1 }')
+echo IP for $HOST1 is $ip
 sed "s/localhost:$PORT1/$ip:$PORT1/g" /etc/nginx/nginx.conf > /root/beforenode.conf
 
-# wait for testnode1 container to be ready
-echo "Waiting for testnode1"
+# wait for $HOST1 container to be ready
+# ping TCP port of remote host using netcat
+# nc -zvv $HOST1 $PORT1 # -zuvv for UDP
+echo "Waiting for $HOST1"
 while true; do
-    nc -z -w1 testnode1 $PORT1 2>/dev/null && break
+    nc -z -w1 $HOST1 $PORT1 2>/dev/null && break
 done
-echo "Waiting for testnode2"
+echo "Waiting for $HOST2"
 while true; do
-    nc -z -w1 testnode2 $PORT2 2>/dev/null && break
+    nc -z -w1 $HOST2 $PORT2 2>/dev/null && break
 done
 
-ip1=$(getent hosts testnode1 | awk '{ print $1 }')
-ip2=$(getent hosts testnode2 | awk '{ print $1 }')
+ip1=$(getent hosts $HOST1 | awk '{ print $1 }')
+ip2=$(getent hosts $HOST2 | awk '{ print $1 }')
 sed "s/localhost:$PORT1/$ip1:$PORT1/g;s/localhost:$PORT2/$ip2:$PORT2/g" /etc/nginx/nginx.conf > /root/afternode.conf
 mv /etc/nginx/nginx.conf /root/nginx.conf.old
 mv /root/afternode.conf /etc/nginx/nginx.conf 
