@@ -10,7 +10,7 @@
 
 ip=$(getent hosts $HOST1 | awk '{ print $1 }')
 echo IP for $HOST1 is $ip
-sed "s/localhost:$PORT1/$ip:$PORT1/g" /etc/nginx/nginx.conf > /root/beforenode.conf
+sed "s,proxy_pass http://$HOST1,proxy_pass http://$ip:$PORT1,g" /etc/nginx/nginx.conf > /root/beforenode.conf
 
 # wait for $HOST1 container to be ready
 # ping TCP port of remote host using netcat
@@ -27,6 +27,7 @@ done
 ip1=$(getent hosts $HOST1 | awk '{ print $1 }')
 ip2=$(getent hosts $HOST2 | awk '{ print $1 }')
 sed "s/localhost:$PORT1/$ip1:$PORT1/g;s/localhost:$PORT2/$ip2:$PORT2/g" /etc/nginx/nginx.conf > /root/afternode.conf
+sed "s,proxy_pass http://$HOST1,proxy_pass http://$ip1:$PORT1,g;s,proxy_pass http://$HOST2,proxy_pass http://$ip2:$PORT2,g" /etc/nginx/nginx.conf > /root/afternode.conf
 mv /etc/nginx/nginx.conf /root/nginx.conf.old
 mv /root/afternode.conf /etc/nginx/nginx.conf 
 # sed "s/localhost:8000/$ip1:8000/g" /etc/nginx/nginx.conf > /root/afternode.conf
