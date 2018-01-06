@@ -1,4 +1,4 @@
-FROM nginx:1.11.10-alpine
+FROM nginx:1.13.8-alpine
 
 RUN apk add --update bash \
         nano \
